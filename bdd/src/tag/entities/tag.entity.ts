@@ -1,12 +1,20 @@
 import { Note } from 'src/note/entities/note.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { User } from 'src/user/entities/user.entity';
+import { Entity, ManyToOne, JoinColumn, PrimaryColumn, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class Tag {
-    @PrimaryGeneratedColumn()
-    idEtiqueta: string;
+    @PrimaryGeneratedColumn({ name: 'tagID' })
+    tagID: number;
 
-    @ManyToOne(type => Note, note => note.tags, { cascade: true })
-    @JoinColumn({ name: "Note_ID" })
-    note: Note
+    @Column({ length: 30, name: 'nameTag' })
+    nameTag: string;
+
+    /* @ManyToOne(type => Note, note => note.tags, { cascade: true })
+    @JoinColumn({ name: "note_ID" })
+    note: Note */
+
+    @ManyToOne(type => User, user => user.notes, { cascade: true })
+    @JoinColumn({ name: "userID" })
+    userID: User
 }

@@ -6,7 +6,10 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { NoteModule } from './note/note.module';
 import { TagModule } from './tag/tag.module';
+import { AuthModule } from './auth/auth.module';
 
+// Modificar el Secret en ENV
+export const jwtSecret = 'hard!to-guess_secret';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -17,12 +20,13 @@ import { TagModule } from './tag/tag.module';
       password: '12345',
       database: 'nest',
       entities: [join(__dirname, '**', '*.entity.{ts,js}')],
-      synchronize: true,
+      /* synchronize: true, */ //Me trae el problema de que la tabla ya existe
       logging: true,
     }),
     UserModule,
     NoteModule,
-    TagModule],
+    TagModule,
+    AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

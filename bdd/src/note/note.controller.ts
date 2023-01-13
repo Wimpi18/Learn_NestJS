@@ -1,34 +1,39 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Query, Delete } from '@nestjs/common';
 import { NoteService } from './note.service';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 
 @Controller('note')
 export class NoteController {
-  constructor(private readonly noteService: NoteService) {}
+  constructor(private readonly noteService: NoteService) { }
 
   @Post()
   create(@Body() createNoteDto: CreateNoteDto) {
-    return this.noteService.create(createNoteDto);
+    return this.noteService.createNote(createNoteDto);
   }
 
   @Get()
   findAll() {
-    return this.noteService.findAll();
+    return this.noteService.getNotes();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.noteService.findOne(+id);
+  /* @Get(':noteID')
+  findOne(@Query('noteID') noteID: number) {
+    return this.noteService.getNoteByID(noteID);
+  } */
+
+  @Get(':statusNote')
+  findByStatus(@Query('statusNote') statusNote: string) {
+    return this.noteService.getNotesByStatus(statusNote);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateNoteDto: UpdateNoteDto) {
-    return this.noteService.update(+id, updateNoteDto);
+  @Patch(':noteID')
+  update(@Query('noteID') noteID: number, @Body() updateNoteDto: UpdateNoteDto) {
+    return this.noteService.updateNote(noteID, updateNoteDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.noteService.remove(+id);
+  @Delete(':noteID')
+  remove(@Query('noteID') noteID: number) {
+    return this.noteService.removeNote(noteID);
   }
 }

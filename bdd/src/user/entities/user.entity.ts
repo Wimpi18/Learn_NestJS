@@ -1,23 +1,31 @@
 import { Note } from 'src/note/entities/note.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Tag } from 'src/tag/entities/tag.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, BaseEntity, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  idUsuario: number;
+  @PrimaryGeneratedColumn({name:'userID'})
+  userID: number
 
   @Column({
-    nullable: false,
-    length: 15,
+    length: 30,
+    unique: true,
   })
   username: string
 
   @Column({
     nullable: false,
-    length: 10,
   })
   password: string
 
-  @OneToMany(type => Note, (note) => note.user)
+  @Column({
+    nullable: false,
+  })
+  salt: string
+
+  @OneToMany(type => Note, (note) => note.userID)
   notes: Note[]
+
+  @OneToMany(type => Tag, (tag) => tag.userID)
+  etiquetas: Tag[]
 }

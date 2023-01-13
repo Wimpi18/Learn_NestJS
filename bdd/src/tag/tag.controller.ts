@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Query, Delete } from '@nestjs/common';
 import { TagService } from './tag.service';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
@@ -9,26 +9,26 @@ export class TagController {
 
   @Post()
   create(@Body() createTagDto: CreateTagDto) {
-    return this.tagService.create(createTagDto);
+    return this.tagService.createTag(createTagDto);
   }
 
   @Get()
   findAll() {
-    return this.tagService.findAll();
+    return this.tagService.getTags();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tagService.findOne(+id);
+  @Get(':tagID')
+  findOne(@Query('tagID') tagID: number) {
+    return this.tagService.getTagByID(tagID);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTagDto: UpdateTagDto) {
-    return this.tagService.update(+id, updateTagDto);
+  @Patch(':tagID')
+  update(@Query('tagID') tagID: number, @Body() updateTagDto: UpdateTagDto) {
+    return this.tagService.updateTag(tagID, updateTagDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tagService.remove(+id);
+  @Delete(':tagID')
+  remove(@Query('tagID') tagID: number) {
+    return this.tagService.removeTag(tagID);
   }
 }
