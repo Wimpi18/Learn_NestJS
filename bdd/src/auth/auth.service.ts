@@ -33,6 +33,7 @@ export class AuthService {
 
     async generateToken(user: User): Promise<string> {
         const payload: JWTPayload = {
+            userID: user.userID,
             usernameID: user.username,
         };
 

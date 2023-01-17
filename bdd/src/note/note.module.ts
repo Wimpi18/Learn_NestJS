@@ -3,9 +3,10 @@ import { NoteService } from './note.service';
 import { NoteController } from './note.controller';
 import { Note } from './entities/note.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { TagModule } from 'src/tag/tag.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Note])],
+  imports: [TypeOrmModule.forFeature([Note]), TagModule],
   controllers: [NoteController],
   providers: [NoteService]
 })

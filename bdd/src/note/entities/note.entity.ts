@@ -15,19 +15,22 @@ export class Note {
 
     @Column({
         nullable: false,
-        name: 'contentNote'
+        name: 'contentNote',
     })
     contentNote: string;
 
     @Column({
         nullable: false,
-        name: 'creationDate'
+        name: 'creationDate',
+        default: () => 'NOW()',
+        update: false,
     })
     creationDate: Date;
 
     @Column({
         nullable: false,
-        name: 'modificationDate'
+        name: 'modificationDate',
+        default: () => 'NOW()', //Genera por defecto la fecha y hora en base al servidor MySQL
     })
     modificationDate: Date;
 
@@ -38,13 +41,19 @@ export class Note {
     })
     statusNote: string;
 
+    /* Aplicar cascade para lo cual necesito un @ManytoMany en Tag
+    https://www.youtube.com/watch?v=_FuBnlVxyF8 */
     @ManyToMany(() => Tag, { cascade: true })
-    @JoinTable({ name: 'NoteToTag' })
-    asignar: Tag[]
+    @JoinTable({
+        name: 'notetotag',
+        joinColumn: { name: 'noteID' },
+        inverseJoinColumn: { name: 'tagID' }
+    })
+    tags: Tag[];
 
     @ManyToOne(type => User, user => user.notes, { cascade: true })
     @JoinColumn({ name: 'userID' })
-    userID: User
+    userID: User;
 
     /* @OneToMany(type => Tag, (tag) => tag.note)
     tags: Tag[] */

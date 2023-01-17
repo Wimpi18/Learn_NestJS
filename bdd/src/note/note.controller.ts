@@ -1,38 +1,56 @@
-import { Controller, Get, Post, Body, Patch, Query, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Query, Delete, UseGuards } from '@nestjs/common';
 import { NoteService } from './note.service';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
+import { GetUser } from 'src/user/entities/GetUser.decorator';
+import { User } from 'src/user/entities/user.entity';
+import { AuthGuard } from '@nestjs/passport';
+import { Tag } from 'src/tag/entities/tag.entity';
 
+@UseGuards(AuthGuard())
 @Controller('note')
 export class NoteController {
   constructor(private readonly noteService: NoteService) { }
 
   @Post()
-  create(@Body() createNoteDto: CreateNoteDto) {
-    return this.noteService.createNote(createNoteDto);
+  create(@Body() createNoteDto: CreateNoteDto, @GetUser() user: User) {
+    return this.noteService.createNote(createNoteDto, user);
   }
 
-  @Get()
-  findAll() {
-    return this.noteService.getNotes();
-  }
-
-  /* @Get(':noteID')
-  findOne(@Query('noteID') noteID: number) {
-    return this.noteService.getNoteByID(noteID);
+  /* @Put()
+  addTagToNote(@Query('noteID') noteID: number, @Body() updateNoteDto: UpdateNoteDto) {
+    return this.noteService.addTagToNote(noteID, updateNoteDto);
   } */
 
-  @Get(':statusNote')
-  findByStatus(@Query('statusNote') statusNote: string) {
-    return this.noteService.getNotesByStatus(statusNote);
+  @Get()
+  findAllNotes(
+    @GetUser() user: User
+  ) {
+    console.log(user);
+    return this.noteService.getNotes(user.userID);
   }
 
-  @Patch(':noteID')
-  update(@Query('noteID') noteID: number, @Body() updateNoteDto: UpdateNoteDto) {
-    return this.noteService.updateNote(noteID, updateNoteDto);
+  @Get('oneNote')
+  findOne(@Query('noteID') noteID: number, @GetUser() user: User) {
+    return this.noteService.getNoteByID(noteID, user.userID);
   }
 
-  @Delete(':noteID')
+  @Get('statusNote')
+  findByStatus(@Query('statusNote') statusNote: string, @GetUser() user: User) {
+    return this.noteService.getNotesByStatus(statusNote, user.userID);
+  }
+
+  @Patch('addTag')
+  addTagToNote(@Query('noteID') noteID: number, @Body() body: Tag, @GetUser() user: User) {
+    return this.noteService.addTagToNote(noteID, user.userID, body);
+  }
+
+  @Patch('deleteTag')
+  deleteTagToNote(@Query('noteID') noteID: number, @Body() body: any, @GetUser() user: User) {
+    return this.noteService.deleteTagToNote(noteID, user.userID, body);
+  }
+
+  @Delete('delete')
   remove(@Query('noteID') noteID: number) {
     return this.noteService.removeNote(noteID);
   }

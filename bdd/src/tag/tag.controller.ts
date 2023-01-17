@@ -12,10 +12,10 @@ export class TagController {
     return this.tagService.createTag(createTagDto);
   }
 
-  @Get()
+  /* @Get()
   findAll() {
     return this.tagService.getTags();
-  }
+  } */
 
   @Get(':tagID')
   findOne(@Query('tagID') tagID: number) {

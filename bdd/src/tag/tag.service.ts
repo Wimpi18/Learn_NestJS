@@ -19,8 +19,10 @@ export class TagService {
     return tag;
   }
 
-  async getTags(): Promise<Tag[]> {
-    return await this.tagRepository.find();
+  async getTags(userID: number): Promise<Tag[]> {
+    return await this.tagRepository.createQueryBuilder('tag')
+    .where('userID = :userID', {userID})
+    .getMany();
   }
 
   async createTag(createTagDto: CreateTagDto) {

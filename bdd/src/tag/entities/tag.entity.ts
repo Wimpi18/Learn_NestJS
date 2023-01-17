@@ -1,6 +1,7 @@
+import { type } from 'os';
 import { Note } from 'src/note/entities/note.entity';
 import { User } from 'src/user/entities/user.entity';
-import { Entity, ManyToOne, JoinColumn, PrimaryColumn, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, ManyToOne, JoinColumn, PrimaryColumn, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
 
 @Entity()
 export class Tag {
@@ -16,5 +17,8 @@ export class Tag {
 
     @ManyToOne(type => User, user => user.notes, { cascade: true })
     @JoinColumn({ name: "userID" })
-    userID: User
+    userID: User;
+
+    /* @ManyToMany(type => Note)
+    notes: Note[]; */
 }

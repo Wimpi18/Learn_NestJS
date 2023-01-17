@@ -20,7 +20,7 @@ export const jwtSecret = 'hard!to-guess_secret';
       password: '12345',
       database: 'nest',
       entities: [join(__dirname, '**', '*.entity.{ts,js}')],
-      /* synchronize: true, */ //Me trae el problema de que la tabla ya existe
+      synchronize: true,
       logging: true,
     }),
     UserModule,
