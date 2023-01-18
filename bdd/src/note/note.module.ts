@@ -8,6 +8,7 @@ import { TagModule } from 'src/tag/tag.module';
 @Module({
   imports: [TypeOrmModule.forFeature([Note]), TagModule],
   controllers: [NoteController],
-  providers: [NoteService]
+  providers: [NoteService],
+  exports: [NoteService]
 })
 export class NoteModule { }

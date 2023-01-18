@@ -1,6 +1,7 @@
+import { NoteToTag } from 'src/note-to-tags/entities/note-to-tag.entity';
 import { Tag } from 'src/tag/entities/tag.entity';
 import { User } from 'src/user/entities/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 
 @Entity()
 export class Note {
@@ -16,6 +17,7 @@ export class Note {
     @Column({
         nullable: false,
         name: 'contentNote',
+        type: 'text'
     })
     contentNote: string;
 
@@ -43,18 +45,18 @@ export class Note {
 
     /* Aplicar cascade para lo cual necesito un @ManytoMany en Tag
     https://www.youtube.com/watch?v=_FuBnlVxyF8 */
-    @ManyToMany(() => Tag, { cascade: true })
+    /* @ManyToMany(() => Tag, { cascade: true})
     @JoinTable({
         name: 'notetotag',
-        joinColumn: { name: 'noteID' },
-        inverseJoinColumn: { name: 'tagID' }
+        joinColumn: { name: 'note_ID' },
+        inverseJoinColumn: { name: 'tag_ID' }
     })
-    tags: Tag[];
+    tags: Tag[]; */
 
     @ManyToOne(type => User, user => user.notes, { cascade: true })
     @JoinColumn({ name: 'userID' })
     userID: User;
 
-    /* @OneToMany(type => Tag, (tag) => tag.note)
-    tags: Tag[] */
+    @OneToMany(type => NoteToTag, (noteToTag) => noteToTag.notes)
+    notes: NoteToTag[];
 }

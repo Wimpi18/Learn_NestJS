@@ -38,7 +38,7 @@ export class AuthService {
         };
 
         // La libreria jwtService se encarga de crear el Token con el signAsync
-        const token = await this.jwtService.signAsync(payload, { secret: jwtSecret });
+        const token = await this.jwtService.signAsync(payload, { secret: jwtSecret});
         return token;
     }
 

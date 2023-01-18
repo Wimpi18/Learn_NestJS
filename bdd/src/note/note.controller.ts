@@ -6,6 +6,7 @@ import { GetUser } from 'src/user/entities/GetUser.decorator';
 import { User } from 'src/user/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { Tag } from 'src/tag/entities/tag.entity';
+import { CreateTagDto } from 'src/tag/dto/create-tag.dto';
 
 @UseGuards(AuthGuard())
 @Controller('note')
@@ -26,7 +27,6 @@ export class NoteController {
   findAllNotes(
     @GetUser() user: User
   ) {
-    console.log(user);
     return this.noteService.getNotes(user.userID);
   }
 
@@ -40,15 +40,20 @@ export class NoteController {
     return this.noteService.getNotesByStatus(statusNote, user.userID);
   }
 
-  @Patch('addTag')
-  addTagToNote(@Query('noteID') noteID: number, @Body() body: Tag, @GetUser() user: User) {
-    return this.noteService.addTagToNote(noteID, user.userID, body);
+  @Get('search')
+  searchInNote(@Query('search') search: string, @GetUser() user: User) {
+    return this.noteService.searchInNote(search, user.userID);
   }
 
-  @Patch('deleteTag')
+  @Patch('addTag')
+  addTagToNote(@Query('noteID') noteID: number, @Body() createTagDto:CreateTagDto, @GetUser() user: User) {
+    return this.noteService.addTagToNote(noteID, user.userID, createTagDto);
+  }
+
+  /* @Patch('deleteTag')
   deleteTagToNote(@Query('noteID') noteID: number, @Body() body: any, @GetUser() user: User) {
     return this.noteService.deleteTagToNote(noteID, user.userID, body);
-  }
+  } */
 
   @Delete('delete')
   remove(@Query('noteID') noteID: number) {
