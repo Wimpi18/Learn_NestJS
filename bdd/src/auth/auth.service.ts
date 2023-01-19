@@ -31,7 +31,7 @@ export class AuthService {
         return result;
     }
 
-    async generateToken(user: User): Promise<string> {
+    async generateToken(user: User): Promise<any> {
         const payload: JWTPayload = {
             userID: user.userID,
             usernameID: user.username,
@@ -39,7 +39,12 @@ export class AuthService {
 
         // La libreria jwtService se encarga de crear el Token con el signAsync
         const token = await this.jwtService.signAsync(payload, { secret: jwtSecret});
-        return token;
+        const newToken = {
+            success: true,
+            token: token,
+            user: payload,
+        }
+        return newToken;
     }
 
     async verifyToken(payload: JWTPayload) {
