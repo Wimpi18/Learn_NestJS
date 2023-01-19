@@ -4,11 +4,14 @@ import { User } from 'src/user/entities/user.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, ManyToMany, JoinTable, PrimaryColumn, Index, SubjectRemovedAndUpdatedError } from 'typeorm';
 
 @Entity({ name: 'notetotag' })
-// @Index(["firstColumn", "secondColumn"], { unique: true})
 export class NoteToTag {
-    @PrimaryGeneratedColumn()
-    noteToTagID: number;
+    @PrimaryColumn({type:"int",name:"noteID"})
+    noteID: number;
 
+    @PrimaryColumn({type:"int",name:"tagID"})
+    tagID: number;
+
+    // Sirve para relacionarlo
     @ManyToOne(type => Note, (note) => note.notes, { cascade: true, })
     @JoinColumn({ name: 'noteID' })
     notes: Note;
