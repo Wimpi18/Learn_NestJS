@@ -29,4 +29,13 @@ export class NoteToTagsService {
   deleteTagToNote(tagID: number) {
     return `Eliminar etiqueta de nota`;
   }
+
+  async orderNotesByTag(userID: number, tagID: number): Promise<NoteToTag[]> {
+    return await this.noteToTagRepository.createQueryBuilder('notetotag')
+      .leftJoin('NoteToTag.noteID', 'note' )
+      .where('Note.userID =:userID', { userID })
+      .andWhere('NoteToTag.tagID =:tagID', { tagID })
+      .orderBy("modificationDate", "DESC", "NULLS LAST")
+      .getMany();
+  }
 }

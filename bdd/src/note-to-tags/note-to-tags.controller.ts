@@ -21,4 +21,9 @@ export class NoteToTagsController {
   deleteTagToNote(@Query('tagID') tagID: number) {
     return this.noteToTagsService.deleteTagToNote(tagID);
   }
+
+  @Get()
+  orderNotesByTag(@GetUser() user: User, @Query('tagID') tagID: number) {
+    return this.noteToTagsService.orderNotesByTag(user.userID, tagID);
+  }
 }

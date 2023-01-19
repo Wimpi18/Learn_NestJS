@@ -93,4 +93,15 @@ export class NoteService {
   async removeNote(noteID: number) {
     return await this.noteRepository.delete(noteID);
   }
+
+  /* Ordenar notas de acuerdo a la fecha */
+  async orderNotesByModificationDate(userID: number): Promise<Note[]> {
+    const note = await this.noteRepository.createQueryBuilder('note')
+      .where('userID=:userID', { userID })
+      .orderBy("modificationDate", "DESC")
+      .getMany();
+    console.log(note);
+    return note;
+  }
+
 }

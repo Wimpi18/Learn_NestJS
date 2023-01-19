@@ -15,6 +15,7 @@ export class AuthService {
     async singIn(emailOrPhone: string, passwordEnviado: string): Promise<string> {
         const user = await this.validateUser(emailOrPhone, passwordEnviado);
         const token = this.generateToken(user);
+        
         return token;
     }
 

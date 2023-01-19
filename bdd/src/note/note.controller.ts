@@ -7,6 +7,7 @@ import { User } from 'src/user/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { Tag } from 'src/tag/entities/tag.entity';
 import { CreateTagDto } from 'src/tag/dto/create-tag.dto';
+import { NotImplementedException } from '@nestjs/common/exceptions';
 
 @UseGuards(AuthGuard())
 @Controller('note')
@@ -58,5 +59,10 @@ export class NoteController {
   @Delete('delete')
   remove(@Query('noteID') noteID: number) {
     return this.noteService.removeNote(noteID);
+  }
+
+  @Get('orderByModificationDate')
+  orderNotesByModificationDate(@Query('userID') userID: number) {
+    return this.noteService.orderNotesByModificationDate(userID);
   }
 }
