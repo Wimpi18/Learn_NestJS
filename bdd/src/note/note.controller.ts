@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Query, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Query, Delete, UseGuards, Param } from '@nestjs/common';
 import { NoteService } from './note.service';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
@@ -29,8 +29,8 @@ export class NoteController {
     return this.noteService.getNoteByID(noteID, user.userID);
   }
 
-  @Get('statusNote')
-  findByStatus(@Query('statusNote') statusNote: string, @GetUser() user: User) {
+  @Get(':statusNote')
+  findByStatus(@Param('statusNote') statusNote: string, @GetUser() user: User) {
     return this.noteService.getNotesByStatus(statusNote, user.userID);
   }
 
