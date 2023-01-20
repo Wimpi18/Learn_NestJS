@@ -11,21 +11,20 @@ export class AuthService {
         private userService: UserService,
         private readonly jwtService: JwtService, // Libreria externa
     ) { }
-// refactorizar emailOrPhone and passwordEnviado
+    // refactorizar emailOrPhone and passwordEnviado
     async singIn(username: string, password: string): Promise<string> {
         const user = await this.validateUser(username, password);
         const token = this.generateToken(user);
-        
+
         return token;
     }
 
     async validateUser(emailOrPhone: string, passwordEnviado: string): Promise<any> {
+        const unauthorizedException = { error: "Credenciales no válidas", success: false };
         const user = await this.userService.validateUser(emailOrPhone);
-        if (!user) {
-            throw new UnauthorizedException('by username');
-        }
-        if (user.password !== passwordEnviado) {
-            throw new UnauthorizedException('by password');
+        if (!user || user.password !== passwordEnviado) {
+            return unauthorizedException;
+            // throw new UnauthorizedException('by username');
         }
         const result = user;
         delete result.password; // Enviamos nuestro usuario sin el password
@@ -39,7 +38,7 @@ export class AuthService {
         };
 
         // La libreria jwtService se encarga de crear el Token con el signAsync
-        const token = await this.jwtService.signAsync(payload, { secret: jwtSecret});
+        const token = await this.jwtService.signAsync(payload, { secret: jwtSecret });
         const newToken = {
             success: true,
             token: token,

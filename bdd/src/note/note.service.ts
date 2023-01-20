@@ -44,12 +44,15 @@ export class NoteService {
     notes.forEach(note => {
       note.notes.forEach(async element => {
         const tag = await this.tagService.getTagByID(element.tagID, userID);
-        // console.log(tag);
-        tags.push(tag);
+        console.log(tag);
+        // tags.push(tag);
       });
     });
-    console.log(tags);
+    // console.log(tags);
+    [[{Note},{Tag}], [], [], []]
     return notes;
+
+
     // const tags = await this.tagService.getTagByID(notes)
     /* const note = await this.noteRepository.createQueryBuilder('note')
       .leftJoinAndSelect("note.notes", "notes")
@@ -86,9 +89,9 @@ export class NoteService {
   async searchInNote(search: string, userID: number) {
     return await this.noteRepository.createQueryBuilder('note')
       .select(["note.titleNote", "note.contentNote"])
-      .where('userID = :userID', { userID })
-      .andWhere(`note.titleNote LIKE "%${search}%"`)
-      .orWhere(`note.contentNote LIKE "%${search}%"`)
+      .where('note.userID = :userID', { userID })
+      .andWhere(`note.titleNote LIKE "%${ search }%"`)
+      .orWhere(`note.contentNote LIKE "%${ search }%"`)
       .getMany()
   }
 

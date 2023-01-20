@@ -29,8 +29,8 @@ export class NoteController {
     return this.noteService.getNoteByID(noteID, user.userID);
   }
 
-  @Get(':statusNote')
-  findByStatus(@Param('statusNote') statusNote: string, @GetUser() user: User) {
+  @Get('statusNote')
+  findByStatus(@Query('statusNote') statusNote: string, @GetUser() user: User) {
     return this.noteService.getNotesByStatus(statusNote, user.userID);
   }
 

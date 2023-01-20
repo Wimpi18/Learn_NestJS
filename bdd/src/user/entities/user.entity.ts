@@ -18,11 +18,6 @@ export class User {
   })
   password: string
 
-  @Column({
-    nullable: false,
-  })
-  salt: string
-
   @OneToMany(type => Note, (note) => note.userID)
   notes: Note[]
 

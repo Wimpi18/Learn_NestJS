@@ -31,4 +31,9 @@ export class NoteToTagsController {
   orderNotesByTag(@GetUser() user: User, @Query('tagID') tagID: number) {
     return this.noteToTagsService.orderNotesByTag(user.userID, tagID);
   }
+
+  @Get('tags')
+  getTagsdByNote(@GetUser() user: User, @Query('noteID') noteID: number) {
+    return this.noteToTagsService.getTagsdByNote(user.userID, noteID);
+  }
 }

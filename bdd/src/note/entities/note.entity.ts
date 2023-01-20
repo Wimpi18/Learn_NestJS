@@ -1,7 +1,7 @@
 import { NoteToTag } from 'src/note-to-tags/entities/note-to-tag.entity';
 import { Tag } from 'src/tag/entities/tag.entity';
 import { User } from 'src/user/entities/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, ManyToMany, JoinTable, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, ManyToMany, JoinTable, OneToMany, UpdateDateColumn, CreateDateColumn } from 'typeorm';
 
 @Entity()
 export class Note {
@@ -34,12 +34,14 @@ export class Note {
         name: 'modificationDate',
         default: () => 'NOW()', //Genera por defecto la fecha y hora en base al servidor MySQL
     })
+    @UpdateDateColumn()
     modificationDate: Date;
 
     @Column({
         nullable: false,
         name: 'statusNote',
         length: 15,
+        default: "main"
     })
     statusNote: string;
 

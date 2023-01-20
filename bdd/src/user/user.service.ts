@@ -11,22 +11,9 @@ import { User } from './entities/user.entity';
 export class UserService {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) { }
 
-  /* async getPasswordByUsername(username: string) {
-    const user = await this.userRepository.createQueryBuilder("user")
-      .where("username = :userID", { userID: username })
-      .getOne();
-    if (!user) {
-      throw new NotFoundException("Recurso no encontrado");
-    }
-    return user.password;
-  } */
-
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
-    /* const hashed = await bcrypt.hash(createUserDto.password, 10); */
-    /* createUserDto.password = hashed; */
-    /* createUserDto.salt = await bcrypt.genSalt(); */
+  async createUser(createUserDto: CreateUserDto) {
     const user = this.userRepository.create(createUserDto);
-    return this.userRepository.save(user);
+    return "Usuario creado correctamente";
   }
 
   async getUsers() {

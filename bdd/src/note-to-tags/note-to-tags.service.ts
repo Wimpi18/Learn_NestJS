@@ -43,7 +43,7 @@ export class NoteToTagsService {
       .orderBy("notes.modificationDate", "DESC")
       .getMany()
   }
-  
+
   async getNotesAndTags(userID: number, noteID: number): Promise<NoteToTag[]> {
     return await this.noteToTagRepository.createQueryBuilder('notetotag')
       .leftJoinAndSelect("notetotag.notes", "notes") //Comprender mejor lo del alias
@@ -52,4 +52,15 @@ export class NoteToTagsService {
       .orderBy("notes.modificationDate", "DESC")
       .getMany()
   }
+
+  async getTagsdByNote(userID: number, noteID: number) {
+    return await this.noteToTagRepository.createQueryBuilder('notetotag')
+      .select(["notetotag.tagID", "notetotag.tags"])
+      .leftJoinAndSelect("notetotag.tags", "tags")
+      .leftJoin("notetotag.notes", "notes")
+      .where("notes.userID = :userID", { userID })
+      .andWhere('notetotag.noteID = :noteID', { noteID })
+      .getMany()
+  }
+
 }
