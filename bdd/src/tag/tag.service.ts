@@ -38,12 +38,29 @@ export class TagService {
     return tag;
   }
 
-  async updateTag(tagID: number, userID: number, updateTagDto: UpdateTagDto) {
-    //this.getTagByID(tagID, userID);
-    return await this.tagRepository.update(tagID, updateTagDto);
+  async updateTag(tagID: number, updateTagDto: UpdateTagDto, userID: number) {
+    const note = await this.tagRepository.createQueryBuilder('note')
+      .where('tagID = :tagID', { tagID })
+      .andWhere("userID = :userID", { userID })
+      .getOne();
+    if(note) {
+      return await this.tagRepository.update(tagID, updateTagDto);
+    } else {
+      throw new NotFoundException("Recurso no encontrado");
+    }
+
   }
 
-  async removeTag(tagID: number) {
-    return await this.tagRepository.delete(tagID);
+  async removeTag(tagID: number, userID: number) {
+    const note = await this.tagRepository.createQueryBuilder('note')
+      .where('tagID = :tagID', { tagID })
+      .andWhere("userID = :userID", { userID })
+      .getOne();
+    if(note) {
+      return await this.tagRepository.delete(tagID);  
+    } else {
+      throw new NotFoundException("Recurso no encontrado");
+    }
+    
   }
 }

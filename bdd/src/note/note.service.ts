@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateTagDto } from 'src/tag/dto/create-tag.dto';
 import { Tag } from 'src/tag/entities/tag.entity';
 import { TagService } from 'src/tag/tag.service';
+import { GetUser } from 'src/user/entities/GetUser.decorator';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateNoteDto } from './dto/create-note.dto';
@@ -15,7 +16,7 @@ export class NoteService {
     @InjectRepository(Note) private readonly noteRepository: Repository<Note>,
     private tagService: TagService,
   ) { }
-
+  // example
   async getNoteByID(noteID: number, userID: number) {
     const note = await this.noteRepository.createQueryBuilder('note')
       .where('note.noteID = :noteID', { noteID })
@@ -86,12 +87,29 @@ export class NoteService {
     return this.noteRepository.save(note);
   } */
 
-  async updateNote(noteID: number, updateNoteDto: UpdateNoteDto) {
-    return await this.noteRepository.update(noteID, updateNoteDto);
+  async updateNote(noteID: number, updateNoteDto: UpdateNoteDto, userID: number) {
+    const note = await this.noteRepository.createQueryBuilder('note')
+      .where('note.noteID = :noteID', { noteID })
+      .andWhere("note.userID = :userID", { userID })
+      .getOne();
+    if(note) {
+      return await this.noteRepository.update(note.noteID, updateNoteDto);
+    } else {
+      throw new NotFoundException("Recurso no encontrado");
+    }
   }
 
-  async removeNote(noteID: number) {
-    return await this.noteRepository.delete(noteID);
+  async removeNote(noteID: number, userID: number) {
+    // verificamos existencia de la nota para el usr
+    const note = await this.noteRepository.createQueryBuilder('note')
+      .where('note.noteID = :noteID', { noteID })
+      .andWhere("note.userID = :userID", { userID })
+      .getOne();
+    if(note) {
+      return await this.noteRepository.delete(note.noteID);  
+    } else {
+      throw new NotFoundException("Recurso no encontrado");
+    }
   }
 
   /* Ordenar notas de acuerdo a la fecha */

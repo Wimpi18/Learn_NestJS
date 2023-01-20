@@ -30,7 +30,7 @@ export class NoteController {
   ) {
     return this.noteService.getNotes(user.userID);
   }
-
+  // example
   @Get('oneNote')
   findOne(@Query('noteID') noteID: number, @GetUser() user: User) {
     return this.noteService.getNoteByID(noteID, user.userID);
@@ -56,9 +56,14 @@ export class NoteController {
     return this.noteService.deleteTagToNote(noteID, user.userID, body);
   } */
 
+  @Patch()
+  updateNote(@Query('noteID') noteID: number, @Body() updateNoteDto: UpdateNoteDto, @GetUser() user: User) {
+    return this.noteService.updateNote(noteID, updateNoteDto, user.userID);
+  }
+
   @Delete('delete')
-  remove(@Query('noteID') noteID: number) {
-    return this.noteService.removeNote(noteID);
+  removeNote(@Query('noteID') noteID: number, @GetUser() user: User) {
+    return this.noteService.removeNote(noteID, user.userID);
   }
 
   @Get('orderByModificationDate')
