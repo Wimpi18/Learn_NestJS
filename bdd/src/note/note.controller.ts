@@ -39,6 +39,11 @@ export class NoteController {
     return this.noteService.searchInNote(search, user.userID);
   }
 
+  @Patch()
+  updateNote(@Query('noteID') noteID: number, @Body() updateTagDto: UpdateNoteDto, @GetUser() user: User) {
+    return this.noteService.updateNote(noteID, updateTagDto, user.userID);
+  }
+
   @Delete('delete')
   removeNote(@Query('noteID') noteID: number, @GetUser() user: User) {
     return this.noteService.removeNote(noteID, user.userID);

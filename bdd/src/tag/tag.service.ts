@@ -10,7 +10,7 @@ import { Tag } from './entities/tag.entity';
 export class TagService {
   constructor(@InjectRepository(Tag) private readonly tagRepository: Repository<Tag>) { }
 
-  async getTagByID(tagID: number, userID: number) {
+  async getTagByID(tagID: number, userID: number):Promise<Tag> {
     const tag = await this.tagRepository.createQueryBuilder('tag')
       .where('tag.tagID = :tagID', { tagID })
       .andWhere('tag.userID = :userID', { userID })

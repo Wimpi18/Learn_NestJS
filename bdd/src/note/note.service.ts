@@ -6,6 +6,7 @@ import { TagService } from 'src/tag/tag.service';
 import { GetUser } from 'src/user/entities/GetUser.decorator';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
+import { isNumberObject } from 'util/types';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { Note } from './entities/note.entity';
@@ -32,7 +33,25 @@ export class NoteService {
 
   // Mejorar este para facilitar el trabajo a Mariana
   async getTagsByNote(userID: number) {
-    const note = await this.noteRepository.createQueryBuilder('note')
+    const notes = await this.noteRepository.createQueryBuilder('note')
+      .leftJoinAndSelect("note.notes", "notes")
+      .where('userID=:userID', { userID })
+      .orderBy("modificationDate", "DESC")
+      .getMany();
+    // return notes;
+    let tags: Tag[];
+  
+    notes.forEach(note => {
+      note.notes.forEach(async element => {
+        const tag = await this.tagService.getTagByID(element.tagID, userID);
+        // console.log(tag);
+        tags.push(tag);
+      });
+    });
+    console.log(tags);
+    return notes;
+    // const tags = await this.tagService.getTagByID(notes)
+    /* const note = await this.noteRepository.createQueryBuilder('note')
       .leftJoinAndSelect("note.notes", "notes")
       .where('userID=:userID', { userID })
       .orderBy("modificationDate", "DESC")
@@ -43,7 +62,7 @@ export class NoteService {
       .where('userID=:userID', { userID })
       .orderBy("modificationDate", "DESC")
       .getMany();
-    return note[0].notes[0].tagID;
+    return note[0].notes[0].tagID; */
   }
 
 
