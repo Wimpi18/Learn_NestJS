@@ -19,15 +19,8 @@ export class NoteController {
     return this.noteService.createNote(createNoteDto, user);
   }
 
-  /* @Put()
-  addTagToNote(@Query('noteID') noteID: number, @Body() updateNoteDto: UpdateNoteDto) {
-    return this.noteService.addTagToNote(noteID, updateNoteDto);
-  } */
-
   @Get()
-  findAllNotes(
-    @GetUser() user: User
-  ) {
+  findAllNotes(@GetUser() user: User) {
     return this.noteService.getNotes(user.userID);
   }
   // example
@@ -46,21 +39,6 @@ export class NoteController {
     return this.noteService.searchInNote(search, user.userID);
   }
 
-  @Patch('addTag')
-  addTagToNote(@Query('noteID') noteID: number, @Body() createTagDto:CreateTagDto, @GetUser() user: User) {
-    return this.noteService.addTagToNote(noteID, user.userID, createTagDto);
-  }
-
-  /* @Patch('deleteTag')
-  deleteTagToNote(@Query('noteID') noteID: number, @Body() body: any, @GetUser() user: User) {
-    return this.noteService.deleteTagToNote(noteID, user.userID, body);
-  } */
-
-  @Patch()
-  updateNote(@Query('noteID') noteID: number, @Body() updateNoteDto: UpdateNoteDto, @GetUser() user: User) {
-    return this.noteService.updateNote(noteID, updateNoteDto, user.userID);
-  }
-
   @Delete('delete')
   removeNote(@Query('noteID') noteID: number, @GetUser() user: User) {
     return this.noteService.removeNote(noteID, user.userID);
@@ -69,5 +47,10 @@ export class NoteController {
   @Get('orderByModificationDate')
   orderNotesByModificationDate(@Query('userID') userID: number) {
     return this.noteService.orderNotesByModificationDate(userID);
+  }
+
+  @Get('tags')
+  getTagsByNote(@GetUser() user: User) {
+    return this.noteService.getTagsByNote(user.userID);
   }
 }

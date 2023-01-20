@@ -23,19 +23,33 @@ export class NoteToTagsService {
       const newNoteToTag = this.noteToTagRepository.create({ notes: note, tags: tag });
       return this.noteToTagRepository.save(newNoteToTag);
     }
-    return 'No se pudo guardar el Many to Many';
+    return;
   }
 
-  deleteTagToNote(tagID: number) {
-    return `Eliminar etiqueta de nota`;
+  async deleteTagToNote(noteID: number, tagID: number, userID: number) {
+    const note = await this.noteService.getNoteByID(noteID, userID);
+    const tag = await this.tagService.getTagByID(tagID, userID);
+    if (note && tag) {
+      return await this.noteToTagRepository.delete({ noteID: noteID, tagID: tagID });
+    }
+    return;
   }
 
   async orderNotesByTag(userID: number, tagID: number): Promise<NoteToTag[]> {
     return await this.noteToTagRepository.createQueryBuilder('notetotag')
-      .leftJoin('NoteToTag.noteID', 'note' )
-      .where('Note.userID =:userID', { userID })
-      .andWhere('NoteToTag.tagID =:tagID', { tagID })
-      .orderBy("modificationDate", "DESC", "NULLS LAST")
-      .getMany();
+      .leftJoinAndSelect("notetotag.notes", "notes") //Comprender mejor lo del alias
+      .where('noteToTag.tagID = :tagID', { tagID })
+      .andWhere('notes.userID = :userID', { userID })
+      .orderBy("notes.modificationDate", "DESC")
+      .getMany()
+  }
+  
+  async getNotesAndTags(userID: number, noteID: number): Promise<NoteToTag[]> {
+    return await this.noteToTagRepository.createQueryBuilder('notetotag')
+      .leftJoinAndSelect("notetotag.notes", "notes") //Comprender mejor lo del alias
+      .leftJoinAndSelect("notetotag.tags", "tags") //Comprender mejor lo del alias
+      .where('notes.userID = :userID', { userID })
+      .orderBy("notes.modificationDate", "DESC")
+      .getMany()
   }
 }

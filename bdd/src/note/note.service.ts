@@ -19,8 +19,10 @@ export class NoteService {
   // example
   async getNoteByID(noteID: number, userID: number) {
     const note = await this.noteRepository.createQueryBuilder('note')
+      .leftJoinAndSelect("note.notes", "notes")
       .where('note.noteID = :noteID', { noteID })
       .andWhere("note.userID = :userID", { userID })
+      .orderBy("modificationDate", "DESC")
       .getOne();
     if (!note) {
       throw new NotFoundException("Recurso no encontrado");
@@ -28,16 +30,37 @@ export class NoteService {
     return note;
   }
 
+  // Mejorar este para facilitar el trabajo a Mariana
+  async getTagsByNote(userID: number) {
+    const note = await this.noteRepository.createQueryBuilder('note')
+      .leftJoinAndSelect("note.notes", "notes")
+      .where('userID=:userID', { userID })
+      .orderBy("modificationDate", "DESC")
+      .getMany();
+
+    const tagsByNote = await this.noteRepository.manager.getRepository(Tag).createQueryBuilder('tag')
+      .leftJoinAndSelect("note.notes", "notes")
+      .where('userID=:userID', { userID })
+      .orderBy("modificationDate", "DESC")
+      .getMany();
+    return note[0].notes[0].tagID;
+  }
+
+
   async getNotesByStatus(statusNote: string, userID: number) {
     return await this.noteRepository.createQueryBuilder("note")
       .where("statusNote = :statusNote", { statusNote })
       .andWhere("userID = :userID", { userID })
+      .orderBy("modificationDate", "DESC")
       .getMany();
   }
 
+  // Nos devuelve todas las notas de un usuario con sus respectivas etiquetas
   async getNotes(userID: number): Promise<Note[]> {
     return await this.noteRepository.createQueryBuilder('note')
+      .leftJoinAndSelect("note.notes", "notes")
       .where('userID=:userID', { userID })
+      .orderBy("modificationDate", "DESC")
       .getMany();
   }
 
@@ -56,43 +79,12 @@ export class NoteService {
     return this.noteRepository.save(note);
   }
 
-  async addTagToNote(noteID: number, userID: number, createTagDto: CreateTagDto) {
-    const note = await this.noteRepository.createQueryBuilder('note')
-      .where("note.userID = :userID", { userID })
-      .andWhere("note.noteID = :noteID", { noteID })
-      .leftJoinAndSelect("note.tags", "tag")
-      .getOne();
-
-    /* const newTags: Tag[] = Array.from(Object.values(createTagDto)[0]); //Con esto obtengo un arreglo de Tags
-    newTags.forEach(tag => {
-      note.tags.push(tag);
-    }); */
-
-    // console.log('Body', newTags);
-    // const tagRepository = this.noteRepository.manager.getRepository(Tag);
-    // const newTags = tagRepository.create(body);
-
-    // console.log('Tags que se van a asignar', body)
-    /* const newTag = new Tag();
-    newTag.tagID = 2;  */
-    // Debemos pasarle un arreglo de tags e iterarlos con ...newTags
-    // note.tags.push(...newTags);
-
-    return this.noteRepository.save(note);
-  }
-
-  /* async deleteTagToNote(noteID: number, userID: number, body: Tag) {
-    const note = await this.getNoteByID(noteID, userID);
-    this.noteRepository.merge(note, body);
-    return this.noteRepository.save(note);
-  } */
-
   async updateNote(noteID: number, updateNoteDto: UpdateNoteDto, userID: number) {
     const note = await this.noteRepository.createQueryBuilder('note')
       .where('note.noteID = :noteID', { noteID })
       .andWhere("note.userID = :userID", { userID })
       .getOne();
-    if(note) {
+    if (note) {
       return await this.noteRepository.update(note.noteID, updateNoteDto);
     } else {
       throw new NotFoundException("Recurso no encontrado");
@@ -105,8 +97,8 @@ export class NoteService {
       .where('note.noteID = :noteID', { noteID })
       .andWhere("note.userID = :userID", { userID })
       .getOne();
-    if(note) {
-      return await this.noteRepository.delete(note.noteID);  
+    if (note) {
+      return await this.noteRepository.delete(note.noteID);
     } else {
       throw new NotFoundException("Recurso no encontrado");
     }
