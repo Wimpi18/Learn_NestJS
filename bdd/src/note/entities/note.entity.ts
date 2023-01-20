@@ -43,16 +43,6 @@ export class Note {
     })
     statusNote: string;
 
-    /* Aplicar cascade para lo cual necesito un @ManytoMany en Tag
-    https://www.youtube.com/watch?v=_FuBnlVxyF8 */
-    /* @ManyToMany(() => Tag, { cascade: true})
-    @JoinTable({
-        name: 'notetotag',
-        joinColumn: { name: 'note_ID' },
-        inverseJoinColumn: { name: 'tag_ID' }
-    })
-    tags: Tag[]; */
-
     @ManyToOne(type => User, user => user.notes, { cascade: true })
     @JoinColumn({ name: 'userID' })
     userID: User;

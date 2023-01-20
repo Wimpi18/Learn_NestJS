@@ -11,10 +11,11 @@ export class AuthService {
         private userService: UserService,
         private readonly jwtService: JwtService, // Libreria externa
     ) { }
-
-    async singIn(emailOrPhone: string, passwordEnviado: string): Promise<string> {
-        const user = await this.validateUser(emailOrPhone, passwordEnviado);
+// refactorizar emailOrPhone and passwordEnviado
+    async singIn(username: string, password: string): Promise<string> {
+        const user = await this.validateUser(username, password);
         const token = this.generateToken(user);
+        
         return token;
     }
 

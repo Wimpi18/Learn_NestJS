@@ -26,13 +26,14 @@ export class TagController {
     return this.tagService.getTagByID(tagID, user.userID);
   }
 
-  @Patch(':tagID')
-  update(@Param('tagID') tagID: number, @GetUser() user: User, @Body() updateTagDto: UpdateTagDto) {
-    return this.tagService.updateTag(tagID, user.userID, updateTagDto);
+  @Patch()
+  updateTag(@Query('tagID') tagID: number, @Body() updateTagDto: UpdateTagDto, @GetUser() user: User) {
+    return this.tagService.updateTag(tagID, updateTagDto, user.userID);
   }
 
-  @Delete(':tagID')
-  remove(@Query('tagID') tagID: number) {
-    return this.tagService.removeTag(tagID);
+  @Delete()
+  removeTag(@Query('tagID') tagID: number, @GetUser() user: User) {
+    return this.tagService.removeTag(tagID, user.userID);
   }
+
 }

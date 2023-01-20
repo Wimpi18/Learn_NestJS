@@ -7,6 +7,7 @@ import { User } from 'src/user/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { Tag } from 'src/tag/entities/tag.entity';
 import { CreateTagDto } from 'src/tag/dto/create-tag.dto';
+import { NotImplementedException } from '@nestjs/common/exceptions';
 
 @UseGuards(AuthGuard())
 @Controller('note')
@@ -18,18 +19,11 @@ export class NoteController {
     return this.noteService.createNote(createNoteDto, user);
   }
 
-  /* @Put()
-  addTagToNote(@Query('noteID') noteID: number, @Body() updateNoteDto: UpdateNoteDto) {
-    return this.noteService.addTagToNote(noteID, updateNoteDto);
-  } */
-
   @Get()
-  findAllNotes(
-    @GetUser() user: User
-  ) {
+  findAllNotes(@GetUser() user: User) {
     return this.noteService.getNotes(user.userID);
   }
-
+  // example
   @Get('oneNote')
   findOne(@Query('noteID') noteID: number, @GetUser() user: User) {
     return this.noteService.getNoteByID(noteID, user.userID);
@@ -45,18 +39,18 @@ export class NoteController {
     return this.noteService.searchInNote(search, user.userID);
   }
 
-  @Patch('addTag')
-  addTagToNote(@Query('noteID') noteID: number, @Body() createTagDto:CreateTagDto, @GetUser() user: User) {
-    return this.noteService.addTagToNote(noteID, user.userID, createTagDto);
+  @Delete('delete')
+  removeNote(@Query('noteID') noteID: number, @GetUser() user: User) {
+    return this.noteService.removeNote(noteID, user.userID);
   }
 
-  /* @Patch('deleteTag')
-  deleteTagToNote(@Query('noteID') noteID: number, @Body() body: any, @GetUser() user: User) {
-    return this.noteService.deleteTagToNote(noteID, user.userID, body);
-  } */
+  @Get('orderByModificationDate')
+  orderNotesByModificationDate(@Query('userID') userID: number) {
+    return this.noteService.orderNotesByModificationDate(userID);
+  }
 
-  @Delete('delete')
-  remove(@Query('noteID') noteID: number) {
-    return this.noteService.removeNote(noteID);
+  @Get('tags')
+  getTagsByNote(@GetUser() user: User) {
+    return this.noteService.getTagsByNote(user.userID);
   }
 }
