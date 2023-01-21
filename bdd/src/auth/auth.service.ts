@@ -19,12 +19,15 @@ export class AuthService {
         return token;
     }
 
+    // Aqui se produce el problema del login por ese return comentado
+    // Ver de mandar un mejor mensaje de error
+    // Revisar porque se realizan tantas consultas similares en el backend
     async validateUser(emailOrPhone: string, passwordEnviado: string): Promise<any> {
         const unauthorizedException = { error: "Credenciales no válidas", success: false };
         const user = await this.userService.validateUser(emailOrPhone);
         if (!user || user.password !== passwordEnviado) {
-            return unauthorizedException;
-            // throw new UnauthorizedException('by username or password');
+            // return unauthorizedException;
+            throw new UnauthorizedException({ succes: false, error: "No cuenta con credenciales" }); 
         }
         const result = user;
         delete result.password; // Enviamos nuestro usuario sin el password

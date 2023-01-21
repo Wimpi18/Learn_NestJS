@@ -45,8 +45,8 @@ export class NoteService {
   // Dada una palabra buscarla en nuestras notas, tanto en el título como en el contenido
   async searchInNote(search: string, userID: number) {
     return await this.noteRepository.createQueryBuilder('note')
-      .select(["note.titleNote", "note.contentNote"])
       .where('note.userID = :userID', { userID })
+      .andWhere('note.statusNote != papelera')
       .andWhere(`note.titleNote LIKE "%${search}%"`)
       .orWhere(`note.contentNote LIKE "%${search}%"`)
       .getMany()
