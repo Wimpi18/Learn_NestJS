@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TagModule } from 'src/tag/tag.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Note]), TagModule],
+  imports: [TypeOrmModule.forFeature([Note])],
   controllers: [NoteController],
   providers: [NoteService],
   exports: [NoteService]

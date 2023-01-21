@@ -10,7 +10,7 @@ import { Tag } from './entities/tag.entity';
 export class TagService {
   constructor(@InjectRepository(Tag) private readonly tagRepository: Repository<Tag>) { }
 
-  async getTagByID(tagID: number, userID: number):Promise<Tag> {
+  async getTagByID(tagID: number, userID: number): Promise<Tag> {
     const tag = await this.tagRepository.createQueryBuilder('tag')
       .where('tag.tagID = :tagID', { tagID })
       .andWhere('tag.userID = :userID', { userID })
@@ -33,17 +33,12 @@ export class TagService {
     return this.tagRepository.save(note);
   }
 
-  createProvisionalTag(createTagDto: CreateTagDto, user: User) {
-    const tag = this.tagRepository.create(createTagDto);
-    return tag;
-  }
-
   async updateTag(tagID: number, updateTagDto: UpdateTagDto, userID: number) {
     const note = await this.tagRepository.createQueryBuilder('note')
       .where('tagID = :tagID', { tagID })
       .andWhere("userID = :userID", { userID })
       .getOne();
-    if(note) {
+    if (note) {
       return await this.tagRepository.update(tagID, updateTagDto);
     } else {
       throw new NotFoundException("Recurso no encontrado");
@@ -56,11 +51,11 @@ export class TagService {
       .where('tagID = :tagID', { tagID })
       .andWhere("userID = :userID", { userID })
       .getOne();
-    if(note) {
-      return await this.tagRepository.delete(tagID);  
+    if (note) {
+      return await this.tagRepository.delete(tagID);
     } else {
       throw new NotFoundException("Recurso no encontrado");
     }
-    
+
   }
 }

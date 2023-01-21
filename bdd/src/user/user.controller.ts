@@ -18,11 +18,6 @@ export class UserController {
     return this.userService.getUsers();
   }
 
-  /* @Get(':userID')
-  getPasswordByUsername(@Query('userID') userID: string) {
-    return this.userService.getPasswordByUsername(userID);
-  } */
-
   @Patch(':userID')
   update(@Query('userID') userID: number, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateUser(userID, updateUserDto);
@@ -32,6 +27,4 @@ export class UserController {
   remove(@Query('userID') userID: number) {
     return this.userService.removeUser(userID);
   }
-
-
 }

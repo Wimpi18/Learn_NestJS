@@ -12,11 +12,6 @@ import { User } from 'src/user/entities/user.entity';
 export class NoteToTagsController {
   constructor(private readonly noteToTagsService: NoteToTagsService) { }
 
-  /* @Get("all")
-  getNotesAndTags(@GetUser() user: User, @Query('noteID') noteID: number) {
-    return this.noteToTagsService.getNotesAndTags(user.userID, noteID);
-  } */
-
   @Post()
   addTagToNote(@Body() { noteID, tagID }: { noteID: number, tagID: number }, @GetUser() user: User) {
     return this.noteToTagsService.addTagToNote(noteID, tagID, user.userID);

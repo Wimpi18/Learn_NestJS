@@ -7,12 +7,8 @@ export class Tag {
     @PrimaryGeneratedColumn({ name: 'tagID' })
     tagID: number;
 
-    @Column({ length: 30, name: 'nameTag'})
+    @Column({ length: 30, name: 'nameTag' })
     nameTag: string;
-
-    /* @ManyToOne(type => Note, note => note.tags, { cascade: true })
-    @JoinColumn({ name: "note_ID" })
-    note: Note */
 
     @ManyToOne(type => User, user => user.notes, { cascade: true })
     @JoinColumn({ name: "userID" })
@@ -20,7 +16,4 @@ export class Tag {
 
     @OneToMany(type => NoteToTag, (noteToTag) => noteToTag.tags)
     tags: NoteToTag[];
-
-    /* @ManyToMany(type => Note)
-    notes: Note[]; */
 }

@@ -1,5 +1,4 @@
 import { NoteToTag } from 'src/note-to-tags/entities/note-to-tag.entity';
-import { Tag } from 'src/tag/entities/tag.entity';
 import { User } from 'src/user/entities/user.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, ManyToMany, JoinTable, OneToMany, UpdateDateColumn, CreateDateColumn } from 'typeorm';
 

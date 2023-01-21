@@ -11,7 +11,7 @@ export class AuthService {
         private userService: UserService,
         private readonly jwtService: JwtService, // Libreria externa
     ) { }
-    // refactorizar emailOrPhone and passwordEnviado
+
     async singIn(username: string, password: string): Promise<string> {
         const user = await this.validateUser(username, password);
         const token = this.generateToken(user);
@@ -24,7 +24,7 @@ export class AuthService {
         const user = await this.userService.validateUser(emailOrPhone);
         if (!user || user.password !== passwordEnviado) {
             return unauthorizedException;
-            // throw new UnauthorizedException('by username');
+            // throw new UnauthorizedException('by username or password');
         }
         const result = user;
         delete result.password; // Enviamos nuestro usuario sin el password

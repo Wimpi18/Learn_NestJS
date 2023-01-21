@@ -20,9 +20,9 @@ export class UserService {
     return await this.userRepository.find();
   }
 
-  async findOneUser(userName: string): Promise<User> {
+  async validateUser(username: string): Promise<User> {
     return this.userRepository.createQueryBuilder('user')
-      .where('username = :userName', { userName })
+      .where('username = :username', { username })
       .getOne();
   }
 
@@ -36,13 +36,6 @@ export class UserService {
 
   validateJWTPayload(payload: JWTPayload): Promise<User> {
     const { usernameID } = payload;
-    return this.findOneUser(usernameID);
-  }
-
-  // Validar si un usuario se ha registrado y devolverlo
-  validateUser(username: string): Promise<User> {
-    const qb = this.userRepository.createQueryBuilder('user');
-    qb.where('user.username = :username', { username });
-    return qb.getOne();
+    return this.validateUser(usernameID);
   }
 }

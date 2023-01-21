@@ -16,6 +16,7 @@ export class NoteToTagsService {
     private tagService: TagService
   ) { }
 
+  // Podemos asignar una etiqueta que existe a una nota que también existe
   async addTagToNote(noteID: number, tagID: number, userID: number) {
     const note = await this.noteService.getNoteByID(noteID, userID);
     const tag = await this.tagService.getTagByID(tagID, userID);
@@ -25,7 +26,7 @@ export class NoteToTagsService {
     }
     return;
   }
-
+  // Podemos eliminar una etiqueta que existe y está asignada a una nota que también existe
   async deleteTagToNote(noteID: number, tagID: number, userID: number) {
     const note = await this.noteService.getNoteByID(noteID, userID);
     const tag = await this.tagService.getTagByID(tagID, userID);
@@ -35,6 +36,7 @@ export class NoteToTagsService {
     return;
   }
 
+  // Me permite ordenar todas las notas que tienen una nota específica
   async orderNotesByTag(userID: number, tagID: number): Promise<NoteToTag[]> {
     return await this.noteToTagRepository.createQueryBuilder('notetotag')
       .leftJoinAndSelect("notetotag.notes", "notes") //Comprender mejor lo del alias
@@ -44,15 +46,7 @@ export class NoteToTagsService {
       .getMany()
   }
 
-  async getNotesAndTags(userID: number, noteID: number): Promise<NoteToTag[]> {
-    return await this.noteToTagRepository.createQueryBuilder('notetotag')
-      .leftJoinAndSelect("notetotag.notes", "notes") //Comprender mejor lo del alias
-      .leftJoinAndSelect("notetotag.tags", "tags") //Comprender mejor lo del alias
-      .where('notes.userID = :userID', { userID })
-      .orderBy("notes.modificationDate", "DESC")
-      .getMany()
-  }
-
+  // Devuelve todas las etiquetas de una nota específica
   async getTagsdByNote(userID: number, noteID: number) {
     return await this.noteToTagRepository.createQueryBuilder('notetotag')
       .select(["notetotag.tagID", "notetotag.tags"])
