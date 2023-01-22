@@ -12,8 +12,11 @@ export class AuthService {
         private readonly jwtService: JwtService, // Libreria externa
     ) { }
 
-    async singIn(username: string, password: string): Promise<string> {
+    async singIn(username: string, password: string): Promise<string | any> {
         const user = await this.validateUser(username, password);
+        if (!user) {
+            return { succes: false, error: "No cuenta con credenciales" };
+        }
         const token = this.generateToken(user);
 
         return token;
@@ -26,8 +29,8 @@ export class AuthService {
         const unauthorizedException = { error: "Credenciales no válidas", success: false };
         const user = await this.userService.validateUser(emailOrPhone);
         if (!user || user.password !== passwordEnviado) {
-            // return unauthorizedException;
-            throw new UnauthorizedException({ succes: false, error: "No cuenta con credenciales" }); 
+            return null;
+            // throw new UnauthorizedException({ succes: false, error: "No cuenta con credenciales" });
         }
         const result = user;
         delete result.password; // Enviamos nuestro usuario sin el password

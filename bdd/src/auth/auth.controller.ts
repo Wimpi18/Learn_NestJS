@@ -10,7 +10,6 @@ export class AuthController {
   create(
     @Body() { username, password }: { username: string; password: string },
   ) {
-    console.log({ username, password });
     return this.authService.singIn(username, password);
   }
 }

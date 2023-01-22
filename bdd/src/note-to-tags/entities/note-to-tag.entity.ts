@@ -12,11 +12,11 @@ export class NoteToTag {
     tagID: number;
 
     // Sirve para relacionarlo
-    @ManyToOne(type => Note, (note) => note.notes, { cascade: true })
+    @ManyToOne(type => Note, (note) => note.notes, { cascade: true, onDelete: 'CASCADE' })
     @JoinColumn({ name: 'noteID' })
     notes: Note; //Parece que este es el alias
 
-    @ManyToOne(type => Tag, (tag) => tag.tags, { cascade: true })
+    @ManyToOne(type => Tag, (tag) => tag.tags, { cascade: true, onDelete: 'CASCADE' })
     @JoinColumn({ name: 'tagID' })
     tags: Tag;
 }
