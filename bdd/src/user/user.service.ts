@@ -12,7 +12,7 @@ export class UserService {
 
   async createUser(createUserDto: CreateUserDto) {
     const user = this.userRepository.create(createUserDto);
-    return "Usuario creado correctamente";
+    return this.userRepository.save(user);
   }
 
   async getUsers() {

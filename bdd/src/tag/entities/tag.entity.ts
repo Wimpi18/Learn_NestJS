@@ -10,9 +10,12 @@ export class Tag {
     @Column({ length: 30, name: 'nameTag' })
     nameTag: string;
 
+    @Column({ name: "userID", update: false })
+    user: number; //Corregir este debería ser userID
+
     @ManyToOne(type => User, user => user.notes, { cascade: true })
     @JoinColumn({ name: "userID" })
-    userID: User;
+    userID: User; //Corregir este debería ser user
 
     @OneToMany(type => NoteToTag, (noteToTag) => noteToTag.tags)
     tags: NoteToTag[];
