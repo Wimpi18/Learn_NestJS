@@ -4,7 +4,9 @@ import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
+import { States } from './entities/enumStates';
 import { Note } from './entities/note.entity';
+
 
 @Injectable()
 export class NoteService {
@@ -44,7 +46,7 @@ export class NoteService {
 
   // Dada una palabra buscarla en nuestras notas, tanto en el título como en el contenido
   async searchInNote(search: string, userID: number) {
-    const papelera: string = "papelera";
+    const papelera: string = States.papelera;
     return await this.noteRepository.createQueryBuilder('note')
       .where('note.userID = :userID', { userID })
       .andWhere("note.statusNote != :papelera", { papelera })
