@@ -5,6 +5,7 @@ export class CreateNoteDto {
     noteID: number;
     titleNote: string;
     contentNote: string;
+    contentHTMLNote: string;
     statusNote: string;
     creationDate: Date;
     modificationDate: Date;

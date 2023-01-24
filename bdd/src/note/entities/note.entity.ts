@@ -22,6 +22,13 @@ export class Note {
 
     @Column({
         nullable: false,
+        name: 'contentHTMLNote',
+        type: 'text'
+    })
+    contentHTMLNote: string;
+
+    @Column({
+        nullable: false,
         name: 'creationDate',
         default: () => 'NOW()',
         update: false,
