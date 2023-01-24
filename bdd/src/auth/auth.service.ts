@@ -12,25 +12,23 @@ export class AuthService {
         private readonly jwtService: JwtService, // Libreria externa
     ) { }
 
-    async singIn(username: string, password: string): Promise<string | any> {
+    async singIn(username: string, password: string): Promise<string> {
         const user = await this.validateUser(username, password);
+
         if (!user) {
-            return { succes: false, error: "No cuenta con credenciales" };
+            throw new UnauthorizedException("No se puede");
         }
         const token = this.generateToken(user);
-
         return token;
     }
 
     // Aqui se produce el problema del login por ese return comentado
     // Ver de mandar un mejor mensaje de error
     // Revisar porque se realizan tantas consultas similares en el backend
-    async validateUser(emailOrPhone: string, passwordEnviado: string): Promise<any> {
-        const unauthorizedException = { error: "Credenciales no válidas", success: false };
-        const user = await this.userService.validateUser(emailOrPhone);
+    async validateUser(usernameEnviado: string, passwordEnviado: string): Promise<any> {
+        const user = await this.userService.validateUser(usernameEnviado);
         if (!user || user.password !== passwordEnviado) {
-            return null;
-            // throw new UnauthorizedException({ succes: false, error: "No cuenta con credenciales" });
+            throw new UnauthorizedException({ success: false, error: "Credenciales no válidas" });
         }
         const result = user;
         delete result.password; // Enviamos nuestro usuario sin el password
@@ -44,13 +42,12 @@ export class AuthService {
         };
 
         // La libreria jwtService se encarga de crear el Token con el signAsync
-        const token = await this.jwtService.signAsync(payload, { secret: jwtSecret });
-        const newToken = {
+        const token = {
             success: true,
-            token: token,
+            token: await this.jwtService.signAsync(payload, { secret: jwtSecret }),
             user: payload,
         }
-        return newToken;
+        return token;
     }
 
     async verifyToken(payload: JWTPayload) {
