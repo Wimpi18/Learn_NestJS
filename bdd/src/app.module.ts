@@ -18,7 +18,7 @@ export const jwtSecret = 'hard!to-guess_secret';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: 'password',
+      password: '12345',
       database: 'nest',
       entities: [join(__dirname, '**', '*.entity.{ts,js}')],
       synchronize: true,

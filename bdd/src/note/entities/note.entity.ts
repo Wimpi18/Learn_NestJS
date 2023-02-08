@@ -16,14 +16,14 @@ export class Note {
     @Column({
         nullable: false,
         name: 'contentNote',
-        type: 'text'
+        length: 3000
     })
     contentNote: string;
 
     @Column({
         nullable: false,
         name: 'contentHTMLNote',
-        type: 'text'
+        type: 'mediumtext'
     })
     contentHTMLNote: string;
 

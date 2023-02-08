@@ -18,7 +18,6 @@ export class NoteService {
       .leftJoinAndSelect("note.notes", "notes")
       .where('note.noteID = :noteID', { noteID })
       .andWhere("note.userID = :userID", { userID })
-      .orderBy("modificationDate", "DESC")
       .getOne();
     if (!note) {
       throw new NotFoundException("Recurso no encontrado");
